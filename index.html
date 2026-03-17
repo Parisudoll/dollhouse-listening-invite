@@ -32,7 +32,6 @@ body {
   animation: heartbeat 2.5s infinite;
 }
 
-/* textura */
 .envelope::after {
   content: "";
   position: absolute;
@@ -42,7 +41,6 @@ body {
   opacity: 0.4;
 }
 
-/* latido */
 @keyframes heartbeat {
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.05);}
@@ -102,9 +100,9 @@ body {
   white-space: pre-line;
 }
 
-/* link */
-a {
-  color: black;
+/* LINK ROSADO 💗 */
+.link {
+  color: #e75480;
   text-decoration: underline;
 }
 
@@ -138,7 +136,6 @@ a {
 
   <div class="flap"></div>
 
-  <!-- CAMBIA EL NOMBRE SI TU ARCHIVO ES DISTINTO -->
   <img src="LOGO.png" class="logo">
 
   <div class="letter">
@@ -154,6 +151,8 @@ a {
 
 <script>
 
+let i = 0;
+
 const message = `Hey! Esto no es para todos… y por eso estás aquí.
 
 Dollhouse tiene su propio espacio, íntimo y real, y quiero que lo vivás conmigo antes que nadie.
@@ -163,26 +162,35 @@ Un listening party solo para gente especial.
 ¿Entrás? 🖤
 
 Lugar: Mina Experts
-https://share.google/NGYAW77vSPZf8va6e
-
 Hora: 7:00pm
 Dresscode: pink, black and white`;
-
-let i = 0;
 
 function typeWriter() {
   if (i < message.length) {
     document.getElementById("typeText").innerHTML += message.charAt(i);
     i++;
     setTimeout(typeWriter, 20);
+  } else {
+    // reemplazar Mina Experts por link
+    document.getElementById("typeText").innerHTML =
+      document.getElementById("typeText").innerHTML.replace(
+        "Mina Experts",
+        `<a href="https://share.google/NGYAW77vSPZf8va6e" target="_blank" class="link">Mina Experts</a>`
+      );
   }
 }
 
 function openEnvelope() {
-  document.getElementById("env").classList.toggle("open");
+  const click = document.getElementById("clickSound");
+  const paper = document.getElementById("paperSound");
 
-  document.getElementById("clickSound").play();
-  document.getElementById("paperSound").play();
+  click.currentTime = 0;
+  paper.currentTime = 0;
+
+  click.play().catch(()=>{});
+  paper.play().catch(()=>{});
+
+  document.getElementById("env").classList.toggle("open");
 
   createHearts();
 
