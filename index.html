@@ -54,7 +54,6 @@ body {
 .letter {
   position: absolute;
   width: 300px;
-  height: auto;
   background: #fffaf5;
   top: 20px;
   left: 20px;
@@ -125,11 +124,16 @@ body {
 
 <!-- sonidos -->
 <audio id="clickSound" preload="auto">
-  <source src="https://assets.mixkit.co/sfx/preview/mixkit-soft-click-1124.mp3" type="audio/mpeg">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-soft-click-1124.mp3">
 </audio>
 
 <audio id="paperSound" preload="auto">
-  <source src="https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3" type="audio/mpeg">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3">
+</audio>
+
+<!-- MUSICA COZY -->
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3">
 </audio>
 
 <script>
@@ -155,7 +159,6 @@ function typeWriter() {
     i++;
     setTimeout(typeWriter, 18);
   } else {
-    // convertir a link
     document.getElementById("typeText").innerHTML =
       document.getElementById("typeText").innerHTML.replace(
         "Mina Experts",
@@ -171,9 +174,14 @@ function openEnvelope() {
 
   const click = document.getElementById("clickSound");
   const paper = document.getElementById("paperSound");
+  const music = document.getElementById("bgMusic");
 
   click.play();
   setTimeout(()=>paper.play(), 150);
+
+  // música suave
+  music.volume = 0.2;
+  music.play();
 
   document.getElementById("env").classList.add("open");
 
