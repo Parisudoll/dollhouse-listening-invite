@@ -23,8 +23,8 @@ body {
 /* SOBRE */
 .envelope {
   position: relative;
-  width: 320px;
-  height: 220px;
+  width: 340px;
+  height: 240px;
   background: linear-gradient(145deg, #f8b9c9, #f2a7bb);
   border-radius: 14px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.25);
@@ -32,38 +32,29 @@ body {
   animation: heartbeat 2.5s infinite;
 }
 
-.envelope::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(rgba(255,255,255,0.2) 1px, transparent 1px);
-  background-size: 4px 4px;
-  opacity: 0.4;
-}
-
 @keyframes heartbeat {
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.05);}
 }
 
-/* tapa */
+/* TAPA */
 .flap {
   position: absolute;
   width: 0;
   height: 0;
-  border-left: 160px solid transparent;
-  border-right: 160px solid transparent;
-  border-bottom: 110px solid #f2a7bb;
-  top: -110px;
+  border-left: 170px solid transparent;
+  border-right: 170px solid transparent;
+  border-bottom: 120px solid #f2a7bb;
+  top: -120px;
   transform-origin: top;
   transition: 0.7s;
 }
 
-/* carta */
+/* CARTA */
 .letter {
   position: absolute;
-  width: 280px;
-  height: 380px;
+  width: 300px;
+  height: auto;
   background: #fffaf5;
   top: 20px;
   left: 20px;
@@ -74,7 +65,6 @@ body {
   transition: 0.9s;
   box-shadow: 0 25px 50px rgba(0,0,0,0.3);
   opacity: 0;
-  overflow-y: auto;
 }
 
 .open .flap {
@@ -82,11 +72,11 @@ body {
 }
 
 .open .letter {
-  transform: translateY(-270px);
+  transform: translateY(-250px);
   opacity: 1;
 }
 
-/* texto */
+/* TEXTO */
 .title {
   font-family: 'Great Vibes', cursive;
   font-size: 34px;
@@ -95,30 +85,18 @@ body {
 
 .text {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 17px;
-  line-height: 1.7;
+  font-size: 18px;
+  line-height: 1.8;
   white-space: pre-line;
 }
 
-/* LINK ROSADO 💗 */
+/* LINK */
 .link {
   color: #e75480;
   text-decoration: underline;
 }
 
-/* corazones */
-.heart {
-  position: absolute;
-  color: rgba(255,105,180,0.5);
-  animation: float 5s linear infinite;
-}
-
-@keyframes float {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-250px); opacity: 0; }
-}
-
-/* logo */
+/* LOGO */
 .logo {
   position: absolute;
   bottom: 10px;
@@ -146,14 +124,17 @@ body {
 </div>
 
 <!-- sonidos -->
-<audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-soft-click-1124.mp3"></audio>
-<audio id="paperSound" src="https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3"></audio>
+<audio id="clickSound" preload="auto">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-soft-click-1124.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="paperSound" preload="auto">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 
-let i = 0;
-
-const message = `Hey! Esto no es para todos… y por eso estás aquí.
+const fullText = `Hey! Esto no es para todos… y por eso estás aquí.
 
 Dollhouse tiene su propio espacio, íntimo y real, y quiero que lo vivás conmigo antes que nadie.
 
@@ -165,13 +146,16 @@ Lugar: Mina Experts
 Hora: 7:00pm
 Dresscode: pink, black and white`;
 
+let i = 0;
+let started = false;
+
 function typeWriter() {
-  if (i < message.length) {
-    document.getElementById("typeText").innerHTML += message.charAt(i);
+  if (i < fullText.length) {
+    document.getElementById("typeText").innerHTML += fullText.charAt(i);
     i++;
-    setTimeout(typeWriter, 20);
+    setTimeout(typeWriter, 18);
   } else {
-    // reemplazar Mina Experts por link
+    // convertir a link
     document.getElementById("typeText").innerHTML =
       document.getElementById("typeText").innerHTML.replace(
         "Mina Experts",
@@ -181,35 +165,19 @@ function typeWriter() {
 }
 
 function openEnvelope() {
+
+  if (started) return;
+  started = true;
+
   const click = document.getElementById("clickSound");
   const paper = document.getElementById("paperSound");
 
-  click.currentTime = 0;
-  paper.currentTime = 0;
+  click.play();
+  setTimeout(()=>paper.play(), 150);
 
-  click.play().catch(()=>{});
-  paper.play().catch(()=>{});
+  document.getElementById("env").classList.add("open");
 
-  document.getElementById("env").classList.toggle("open");
-
-  createHearts();
-
-  setTimeout(typeWriter, 700);
-}
-
-function createHearts() {
-  for (let i = 0; i < 20; i++) {
-    let heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤";
-    heart.style.left = Math.random()*window.innerWidth + "px";
-    heart.style.top = "100%";
-    heart.style.fontSize = (12 + Math.random()*18) + "px";
-
-    document.body.appendChild(heart);
-
-    setTimeout(()=>heart.remove(),5000);
-  }
+  setTimeout(typeWriter, 600);
 }
 
 </script>
