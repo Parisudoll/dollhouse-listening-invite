@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dollhouse Invite</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  background: #f7d6e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Playfair Display', serif;
+}
+
+/* SOBRE */
+.envelope {
+  width: 250px;
+  height: 170px;
+  background: linear-gradient(145deg, #f5b6c8, #fcd6e0);
+  position: relative;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  animation: heartbeat 2s infinite;
+}
+
+/* LATIDO */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* TAPA */
+.flap {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 125px solid transparent;
+  border-right: 125px solid transparent;
+  border-bottom: 90px solid #f5b6c8;
+  top: -90px;
+  transition: 0.6s;
+}
+
+/* CARTA */
+.letter {
+  position: absolute;
+  width: 220px;
+  height: 300px;
+  background: #fffdf8;
+  top: 10px;
+  left: 15px;
+  padding: 20px;
+  box-sizing: border-box;
+  transform: translateY(150px);
+  transition: 0.6s;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  overflow-y: auto;
+}
+
+.open .flap {
+  transform: rotateX(180deg);
+}
+
+.open .letter {
+  transform: translateY(-180px);
+}
+
+/* TEXTO */
+.title {
+  font-family: 'Great Vibes', cursive;
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+.text {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* CORAZONES */
+.heart {
+  position: absolute;
+  color: rgba(255, 105, 180, 0.4);
+  font-size: 20px;
+  animation: float 4s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-200px); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="envelope" onclick="openEnvelope()" id="env">
+  <div class="flap"></div>
+
+  <div class="letter">
+    <div class="title">Dollhouse</div>
+    <div class="text">
+      Hey! Esto no es para todos… y por eso estás aquí.<br><br>
+
+      Dollhouse tiene su propio espacio, íntimo y real, y quiero que lo vivás conmigo antes que nadie.<br><br>
+
+      Un listening party solo para gente especial.<br><br>
+
+      ¿Entrás? 🖤<br><br>
+
+      <b>Lugar:</b> Mina Experts<br>
+      <b>Hora:</b> 7:00pm<br>
+      <b>Dresscode:</b> pink, black and white
+    </div>
+  </div>
+</div>
+
+<!-- AUDIO -->
+<audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-soft-click-1124.mp3"></audio>
+
+<script>
+function openEnvelope() {
+  document.getElementById("env").classList.toggle("open");
+  document.getElementById("clickSound").play();
+
+  createHearts();
+}
+
+function createHearts() {
+  for (let i = 0; i < 15; i++) {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = "100%";
+    heart.style.fontSize = (10 + Math.random()*20) + "px";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 4000);
+  }
+}
+</script>
+
+</body>
+</html>
