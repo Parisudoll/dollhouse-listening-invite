@@ -67,21 +67,19 @@ body {
   overflow: hidden;
 }
 
-/* textura real FIX */
+/* textura papel */
 .letter::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: 
-    repeating-linear-gradient(
-      45deg,
-      rgba(0,0,0,0.02),
-      rgba(0,0,0,0.02) 2px,
-      transparent 2px,
-      transparent 4px
-    );
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0,0,0,0.02),
+    rgba(0,0,0,0.02) 2px,
+    transparent 2px,
+    transparent 4px
+  );
   opacity: 0.4;
-  pointer-events: none;
   border-radius: 12px;
 }
 
@@ -114,33 +112,23 @@ body {
   text-decoration: underline;
 }
 
-/* LOGO */
+/* LOGO GRANDE */
 .logo {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 65px;
-  opacity: 0.9;
+  bottom: 8px;
+  right: 8px;
+  width: 95px;
+  opacity: 0.95;
 }
 
-/* PARTICULAS */
+/* partículas */
 .heart, .bear, .sparkle {
   position: absolute;
-  animation: float 6s linear infinite;
 }
 
 .heart { color: rgba(255,105,180,0.7); }
 .bear { font-size: 20px; }
-.sparkle {
-  color: white;
-  font-size: 12px;
-  opacity: 0.8;
-}
-
-@keyframes float {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-300px); opacity: 0; }
-}
+.sparkle { color: white; font-size: 12px; }
 
 </style>
 </head>
@@ -185,12 +173,12 @@ Un listening party solo para gente especial.
 
 Confirma asistencia
 Hora: 6:00pm
-Prepara tu mejor Pijama;
+Prepara tu mejor Pijama;`;
 
 let i = 0;
 let started = false;
-let intervalParticles;
 
+/* máquina de escribir */
 function typeWriter() {
   if (i < fullText.length) {
     document.getElementById("typeText").innerHTML += fullText.charAt(i);
@@ -200,7 +188,7 @@ function typeWriter() {
     document.getElementById("typeText").innerHTML =
       document.getElementById("typeText").innerHTML.replace(
         "Confirma asistencia",
-        `<a href="https://share.google/NGYAW77vSPZf8va6e" target="_blank" class="link">Confirma asistencia</a>`
+        `<a href="https://forms.gle/C4294wdLDyoJmyNP6" target="_blank" class="link">Confirma asistencia</a>`
       );
   }
 }
@@ -224,12 +212,11 @@ function openEnvelope() {
   setTimeout(typeWriter, 600);
 }
 
-/* partículas continuas */
+/* partículas constantes */
 function startParticles() {
-  intervalParticles = setInterval(() => {
+  setInterval(() => {
 
     let el = document.createElement("div");
-
     let rand = Math.random();
 
     if (rand < 0.4) {
@@ -247,11 +234,55 @@ function startParticles() {
     el.style.top = "100%";
     el.style.fontSize = (12 + Math.random()*20) + "px";
 
+    el.animate([
+      { transform: "translateY(0)", opacity: 1 },
+      { transform: "translateY(-300px)", opacity: 0 }
+    ], {
+      duration: 6000,
+      easing: "linear"
+    });
+
     document.body.appendChild(el);
 
     setTimeout(()=>el.remove(),6000);
 
   }, 300);
+}
+
+/* glitter al tocar */
+document.addEventListener("click", sparkleBurst);
+document.addEventListener("touchstart", (e)=>{
+  let t = e.touches[0];
+  sparkleBurst({clientX:t.clientX, clientY:t.clientY});
+});
+
+function sparkleBurst(e) {
+  for (let i = 0; i < 10; i++) {
+    let s = document.createElement("div");
+    s.className = "sparkle";
+    s.innerHTML = "✦";
+
+    s.style.left = e.clientX + "px";
+    s.style.top = e.clientY + "px";
+
+    document.body.appendChild(s);
+
+    let angle = Math.random()*2*Math.PI;
+    let dist = 30 + Math.random()*40;
+
+    let x = Math.cos(angle)*dist;
+    let y = Math.sin(angle)*dist;
+
+    s.animate([
+      { transform: "translate(0,0)", opacity: 1 },
+      { transform: `translate(${x}px, ${y}px)`, opacity: 0 }
+    ], {
+      duration: 600,
+      easing: "ease-out"
+    });
+
+    setTimeout(()=>s.remove(),600);
+  }
 }
 
 </script>
