@@ -20,7 +20,6 @@ body {
   overflow: hidden;
 }
 
-/* SOBRE */
 .envelope {
   position: relative;
   width: 340px;
@@ -37,7 +36,6 @@ body {
   50%{transform:scale(1.05);}
 }
 
-/* TAPA */
 .flap {
   position: absolute;
   width: 0;
@@ -50,7 +48,6 @@ body {
   transition: 0.7s;
 }
 
-/* CARTA */
 .letter {
   position: absolute;
   width: 300px;
@@ -58,29 +55,11 @@ body {
   top: 20px;
   left: 20px;
   padding: 25px;
-  box-sizing: border-box;
   border-radius: 12px;
   transform: translateY(0);
   transition: 0.9s;
   box-shadow: 0 25px 50px rgba(0,0,0,0.3);
   opacity: 0;
-  overflow: hidden;
-}
-
-/* textura */
-.letter::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(0,0,0,0.02),
-    rgba(0,0,0,0.02) 2px,
-    transparent 2px,
-    transparent 4px
-  );
-  opacity: 0.4;
-  border-radius: 12px;
 }
 
 .open .flap { transform: rotateX(180deg); }
@@ -89,7 +68,6 @@ body {
   opacity: 1;
 }
 
-/* TEXTO */
 .title {
   font-family: 'Great Vibes', cursive;
   font-size: 36px;
@@ -99,30 +77,26 @@ body {
   font-family: 'Cormorant Garamond', serif;
   font-size: 18px;
   line-height: 1.8;
+  white-space: pre-line;
 }
 
-/* LINK */
 .link {
   color: #e75480;
   text-decoration: underline;
 }
 
-/* LOGO */
 .logo {
   position: absolute;
   bottom: 8px;
   right: 8px;
-  width: 95px;
+  width: 110px; /* MÁS GRANDE */
 }
 
 /* partículas */
-.heart, .bear, .sparkle {
-  position: absolute;
-}
-
+.heart, .bear, .sparkle { position:absolute; }
 .heart { color: rgba(255,105,180,0.7); }
-.bear { font-size: 20px; }
-.sparkle { color: white; }
+.bear { font-size:20px; }
+.sparkle { color:white; }
 
 </style>
 </head>
@@ -130,16 +104,14 @@ body {
 <body>
 
 <div class="envelope" onclick="openEnvelope()" id="env">
-
   <div class="flap"></div>
-
   <img src="LOGO.png" class="logo">
 
   <div class="letter">
     <div class="title">Dollhouse</div>
     <div class="text" id="typeText"></div>
+    <div id="extraContent"></div>
   </div>
-
 </div>
 
 <audio id="clickSound">
@@ -157,27 +129,37 @@ body {
 <script>
 
 let started = false;
-let htmlText = `Hey! Esto no es para todos… y por eso estás aquí.<br><br>
 
-Dollhouse tiene su propio espacio, íntimo y real, y queremos que lo vivás con nosotras antes que nadie.<br><br>
+const text = `Hey! Esto no es para todos… y por eso estás aquí.
 
-Un listening party solo para gente especial.<br><br>
+Dollhouse tiene su propio espacio, íntimo y real, y queremos que lo vivás con nosotras antes que nadie.
 
-¿Entrás? 🖤<br><br>
+Un listening party solo para gente especial.
 
-<a href="https://forms.gle/C4294wdLDyoJmyNP6" target="_blank" class="link">Confirma asistencia</a><br><br>
-
-Hora: 6:00pm<br>
-Prepara tu mejor Pijama;`;
+¿Entrás? 🖤`;
 
 let i = 0;
 
 function typeWriter() {
-  if (i < htmlText.length) {
-    document.getElementById("typeText").innerHTML += htmlText.charAt(i);
+  if (i < text.length) {
+    document.getElementById("typeText").innerHTML += text.charAt(i);
     i++;
-    setTimeout(typeWriter, 15);
+    setTimeout(typeWriter, 18);
+  } else {
+    showExtra();
   }
+}
+
+function showExtra() {
+  document.getElementById("extraContent").innerHTML = `
+    <br>
+    <a href="https://forms.gle/C4294wdLDyoJmyNP6" target="_blank" class="link">
+      Confirma asistencia
+    </a>
+    <br><br>
+    Hora: 6:00pm<br>
+    Prepara tu mejor Pijama;
+  `;
 }
 
 function openEnvelope() {
