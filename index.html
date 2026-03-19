@@ -66,6 +66,16 @@ body {
   opacity: 0;
 }
 
+/* textura papel REALISTA */
+.letter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+  opacity: 0.25;
+  border-radius: 12px;
+}
+
 .open .flap {
   transform: rotateX(180deg);
 }
@@ -78,7 +88,7 @@ body {
 /* TEXTO */
 .title {
   font-family: 'Great Vibes', cursive;
-  font-size: 34px;
+  font-size: 36px;
   margin-bottom: 10px;
 }
 
@@ -95,13 +105,32 @@ body {
   text-decoration: underline;
 }
 
-/* LOGO */
+/* LOGO MÁS GRANDE */
 .logo {
   position: absolute;
   bottom: 10px;
   right: 10px;
-  width: 45px;
-  opacity: 0.85;
+  width: 65px;
+  opacity: 0.9;
+}
+
+/* corazones */
+.heart, .bear {
+  position: absolute;
+  animation: float 5s linear infinite;
+}
+
+.heart {
+  color: rgba(255,105,180,0.6);
+}
+
+.bear {
+  font-size: 20px;
+}
+
+@keyframes float {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-250px); opacity: 0; }
 }
 
 </style>
@@ -131,9 +160,8 @@ body {
   <source src="https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3">
 </audio>
 
-<!-- MUSICA COZY -->
 <audio id="bgMusic" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3">
+  <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -172,20 +200,42 @@ function openEnvelope() {
   if (started) return;
   started = true;
 
-  const click = document.getElementById("clickSound");
-  const paper = document.getElementById("paperSound");
-  const music = document.getElementById("bgMusic");
+  document.getElementById("clickSound").play();
+  setTimeout(()=>document.getElementById("paperSound").play(),150);
 
-  click.play();
-  setTimeout(()=>paper.play(), 150);
-
-  // música suave
+  let music = document.getElementById("bgMusic");
   music.volume = 0.2;
   music.play();
 
   document.getElementById("env").classList.add("open");
 
+  createParticles();
+
   setTimeout(typeWriter, 600);
+}
+
+/* corazones + ositos 🧸 */
+function createParticles() {
+  for (let i = 0; i < 25; i++) {
+
+    let el = document.createElement("div");
+
+    if (Math.random() > 0.5) {
+      el.className = "heart";
+      el.innerHTML = "❤";
+    } else {
+      el.className = "bear";
+      el.innerHTML = "🧸";
+    }
+
+    el.style.left = Math.random()*window.innerWidth + "px";
+    el.style.top = "100%";
+    el.style.fontSize = (14 + Math.random()*20) + "px";
+
+    document.body.appendChild(el);
+
+    setTimeout(()=>el.remove(),5000);
+  }
 }
 
 </script>
