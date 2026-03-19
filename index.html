@@ -67,7 +67,7 @@ body {
   overflow: hidden;
 }
 
-/* textura papel */
+/* textura */
 .letter::before {
   content: "";
   position: absolute;
@@ -83,10 +83,7 @@ body {
   border-radius: 12px;
 }
 
-.open .flap {
-  transform: rotateX(180deg);
-}
-
+.open .flap { transform: rotateX(180deg); }
 .open .letter {
   transform: translateY(-250px);
   opacity: 1;
@@ -96,14 +93,12 @@ body {
 .title {
   font-family: 'Great Vibes', cursive;
   font-size: 36px;
-  margin-bottom: 10px;
 }
 
 .text {
   font-family: 'Cormorant Garamond', serif;
   font-size: 18px;
   line-height: 1.8;
-  white-space: pre-line;
 }
 
 /* LINK */
@@ -112,13 +107,12 @@ body {
   text-decoration: underline;
 }
 
-/* LOGO GRANDE */
+/* LOGO */
 .logo {
   position: absolute;
   bottom: 8px;
   right: 8px;
   width: 95px;
-  opacity: 0.95;
 }
 
 /* partículas */
@@ -128,7 +122,7 @@ body {
 
 .heart { color: rgba(255,105,180,0.7); }
 .bear { font-size: 20px; }
-.sparkle { color: white; font-size: 12px; }
+.sparkle { color: white; }
 
 </style>
 </head>
@@ -148,48 +142,41 @@ body {
 
 </div>
 
-<!-- sonidos -->
-<audio id="clickSound" preload="auto">
+<audio id="clickSound">
   <source src="https://assets.mixkit.co/sfx/preview/mixkit-soft-click-1124.mp3">
 </audio>
 
-<audio id="paperSound" preload="auto">
+<audio id="paperSound">
   <source src="https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3">
 </audio>
 
 <audio id="bgMusic" loop>
-  <source src="music.mp3" type="audio/mpeg">
+  <source src="music.mp3">
 </audio>
 
 <script>
 
-const fullText = `Hey! Esto no es para todos… y por eso estás aquí.
+let started = false;
+let htmlText = `Hey! Esto no es para todos… y por eso estás aquí.<br><br>
 
-Dollhouse tiene su propio espacio, íntimo y real, y queremos que lo vivás con nosotras antes que nadie.
+Dollhouse tiene su propio espacio, íntimo y real, y queremos que lo vivás con nosotras antes que nadie.<br><br>
 
-Un listening party solo para gente especial.
+Un listening party solo para gente especial.<br><br>
 
-¿Entrás? 🖤
+¿Entrás? 🖤<br><br>
 
-Confirma asistencia
-Hora: 6:00pm
+<a href="https://forms.gle/C4294wdLDyoJmyNP6" target="_blank" class="link">Confirma asistencia</a><br><br>
+
+Hora: 6:00pm<br>
 Prepara tu mejor Pijama;`;
 
 let i = 0;
-let started = false;
 
-/* máquina de escribir */
 function typeWriter() {
-  if (i < fullText.length) {
-    document.getElementById("typeText").innerHTML += fullText.charAt(i);
+  if (i < htmlText.length) {
+    document.getElementById("typeText").innerHTML += htmlText.charAt(i);
     i++;
-    setTimeout(typeWriter, 18);
-  } else {
-    document.getElementById("typeText").innerHTML =
-      document.getElementById("typeText").innerHTML.replace(
-        "Confirma asistencia",
-        `<a href="https://forms.gle/C4294wdLDyoJmyNP6" target="_blank" class="link">Confirma asistencia</a>`
-      );
+    setTimeout(typeWriter, 15);
   }
 }
 
@@ -212,74 +199,54 @@ function openEnvelope() {
   setTimeout(typeWriter, 600);
 }
 
-/* partículas constantes */
+/* partículas */
 function startParticles() {
   setInterval(() => {
 
     let el = document.createElement("div");
-    let rand = Math.random();
+    let r = Math.random();
 
-    if (rand < 0.4) {
-      el.className = "heart";
-      el.innerHTML = "❤";
-    } else if (rand < 0.8) {
-      el.className = "bear";
-      el.innerHTML = "🧸";
-    } else {
-      el.className = "sparkle";
-      el.innerHTML = "✦";
-    }
+    if (r < 0.4) { el.className="heart"; el.innerHTML="❤"; }
+    else if (r < 0.8) { el.className="bear"; el.innerHTML="🧸"; }
+    else { el.className="sparkle"; el.innerHTML="✦"; }
 
-    el.style.left = Math.random()*window.innerWidth + "px";
+    el.style.left = Math.random()*window.innerWidth+"px";
     el.style.top = "100%";
-    el.style.fontSize = (12 + Math.random()*20) + "px";
-
-    el.animate([
-      { transform: "translateY(0)", opacity: 1 },
-      { transform: "translateY(-300px)", opacity: 0 }
-    ], {
-      duration: 6000,
-      easing: "linear"
-    });
 
     document.body.appendChild(el);
 
+    el.animate([
+      {transform:"translateY(0)",opacity:1},
+      {transform:"translateY(-300px)",opacity:0}
+    ],{duration:6000});
+
     setTimeout(()=>el.remove(),6000);
 
-  }, 300);
+  },300);
 }
 
-/* glitter al tocar */
-document.addEventListener("click", sparkleBurst);
-document.addEventListener("touchstart", (e)=>{
-  let t = e.touches[0];
-  sparkleBurst({clientX:t.clientX, clientY:t.clientY});
+/* glitter */
+document.addEventListener("click", e=>spark(e.clientX,e.clientY));
+document.addEventListener("touchstart", e=>{
+  let t=e.touches[0]; spark(t.clientX,t.clientY);
 });
 
-function sparkleBurst(e) {
-  for (let i = 0; i < 10; i++) {
-    let s = document.createElement("div");
-    s.className = "sparkle";
-    s.innerHTML = "✦";
-
-    s.style.left = e.clientX + "px";
-    s.style.top = e.clientY + "px";
-
+function spark(x,y){
+  for(let i=0;i<10;i++){
+    let s=document.createElement("div");
+    s.className="sparkle";
+    s.innerHTML="✦";
+    s.style.left=x+"px";
+    s.style.top=y+"px";
     document.body.appendChild(s);
 
-    let angle = Math.random()*2*Math.PI;
-    let dist = 30 + Math.random()*40;
-
-    let x = Math.cos(angle)*dist;
-    let y = Math.sin(angle)*dist;
+    let a=Math.random()*2*Math.PI;
+    let d=30+Math.random()*40;
 
     s.animate([
-      { transform: "translate(0,0)", opacity: 1 },
-      { transform: `translate(${x}px, ${y}px)`, opacity: 0 }
-    ], {
-      duration: 600,
-      easing: "ease-out"
-    });
+      {transform:"translate(0,0)",opacity:1},
+      {transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px)`,opacity:0}
+    ],{duration:600});
 
     setTimeout(()=>s.remove(),600);
   }
