@@ -64,15 +64,24 @@ body {
   transition: 0.9s;
   box-shadow: 0 25px 50px rgba(0,0,0,0.3);
   opacity: 0;
+  overflow: hidden;
 }
 
-/* textura papel REALISTA */
+/* textura real FIX */
 .letter::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
-  opacity: 0.25;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      rgba(0,0,0,0.02),
+      rgba(0,0,0,0.02) 2px,
+      transparent 2px,
+      transparent 4px
+    );
+  opacity: 0.4;
+  pointer-events: none;
   border-radius: 12px;
 }
 
@@ -105,7 +114,7 @@ body {
   text-decoration: underline;
 }
 
-/* LOGO MÁS GRANDE */
+/* LOGO */
 .logo {
   position: absolute;
   bottom: 10px;
@@ -114,23 +123,23 @@ body {
   opacity: 0.9;
 }
 
-/* corazones */
-.heart, .bear {
+/* PARTICULAS */
+.heart, .bear, .sparkle {
   position: absolute;
-  animation: float 5s linear infinite;
+  animation: float 6s linear infinite;
 }
 
-.heart {
-  color: rgba(255,105,180,0.6);
-}
-
-.bear {
-  font-size: 20px;
+.heart { color: rgba(255,105,180,0.7); }
+.bear { font-size: 20px; }
+.sparkle {
+  color: white;
+  font-size: 12px;
+  opacity: 0.8;
 }
 
 @keyframes float {
   from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-250px); opacity: 0; }
+  to { transform: translateY(-300px); opacity: 0; }
 }
 
 </style>
@@ -180,6 +189,7 @@ Dresscode: pink, black and white`;
 
 let i = 0;
 let started = false;
+let intervalParticles;
 
 function typeWriter() {
   if (i < fullText.length) {
@@ -209,33 +219,39 @@ function openEnvelope() {
 
   document.getElementById("env").classList.add("open");
 
-  createParticles();
+  startParticles();
 
   setTimeout(typeWriter, 600);
 }
 
-/* corazones + ositos 🧸 */
-function createParticles() {
-  for (let i = 0; i < 25; i++) {
+/* partículas continuas */
+function startParticles() {
+  intervalParticles = setInterval(() => {
 
     let el = document.createElement("div");
 
-    if (Math.random() > 0.5) {
+    let rand = Math.random();
+
+    if (rand < 0.4) {
       el.className = "heart";
       el.innerHTML = "❤";
-    } else {
+    } else if (rand < 0.8) {
       el.className = "bear";
       el.innerHTML = "🧸";
+    } else {
+      el.className = "sparkle";
+      el.innerHTML = "✦";
     }
 
     el.style.left = Math.random()*window.innerWidth + "px";
     el.style.top = "100%";
-    el.style.fontSize = (14 + Math.random()*20) + "px";
+    el.style.fontSize = (12 + Math.random()*20) + "px";
 
     document.body.appendChild(el);
 
-    setTimeout(()=>el.remove(),5000);
-  }
+    setTimeout(()=>el.remove(),6000);
+
+  }, 300);
 }
 
 </script>
